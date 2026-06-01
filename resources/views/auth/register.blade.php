@@ -2,95 +2,142 @@
 @section('title', 'Crear cuenta')
 
 @section('content')
-<div style="
-    background: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: 16px;
-    padding: 2rem;
-    box-shadow: var(--shadow-lg)
-">
-    <h2 style="font-size:1.125rem; font-weight:700; color:var(--text-primary); margin:0 0 0.25rem">
-        Crear una cuenta
-    </h2>
-    <p style="font-size:0.8125rem; color:var(--text-muted); margin:0 0 1.75rem">
-        Completa los datos para comenzar
-    </p>
+
+<div class="rounded-2xl border p-8"
+     style="background: var(--bg-surface); border-color: var(--border-subtle); box-shadow: var(--shadow-lg)">
+
+    <h2 class="text-[1.125rem] font-bold mb-1" style="color: var(--text-primary)">Crea tu cuenta</h2>
+    <p class="text-[0.8125rem] mb-7" style="color: var(--text-muted)">Completa los datos para comenzar</p>
 
     @if ($errors->any())
-        <div style="
-            padding: 0.875rem 1rem;
-            background: var(--color-error-bg);
-            border: 1px solid var(--color-error);
-            border-radius: 10px;
-            margin-bottom: 1.25rem;
-            font-size: 0.8125rem;
-            color: var(--color-error)
-        ">
-            @foreach ($errors->all() as $error)
-                <p style="margin:0">{{ $error }}</p>
-            @endforeach
+        <div class="flex gap-2.5 p-3.5 rounded-xl border mb-5 text-[0.8125rem]"
+             style="background: var(--color-error-bg); border-color: var(--color-error); color: var(--color-error)">
+            <x-heroicon-s-exclamation-circle class="w-4 h-4 shrink-0 mt-0.5"/>
+            <div>
+                @foreach ($errors->all() as $error)
+                    <p class="m-0 leading-snug">{{ $error }}</p>
+                @endforeach
+            </div>
         </div>
     @endif
 
-    <form method="POST" action="{{ route('register') }}">
+    <form method="POST" action="{{ route('register') }}" class="space-y-4">
         @csrf
 
-        @foreach ([
-            ['id'=>'name',                 'label'=>'Nombre completo',      'type'=>'text',     'placeholder'=>'Juan Pérez',       'autocomplete'=>'name'],
-            ['id'=>'email',                'label'=>'Correo electrónico',   'type'=>'email',    'placeholder'=>'tu@correo.com',    'autocomplete'=>'email'],
-            ['id'=>'password',             'label'=>'Contraseña',           'type'=>'password', 'placeholder'=>'Mínimo 8 caracteres', 'autocomplete'=>'new-password'],
-            ['id'=>'password_confirmation','label'=>'Confirmar contraseña', 'type'=>'password', 'placeholder'=>'Repite la contraseña', 'autocomplete'=>'new-password'],
-        ] as $field)
-            <div style="margin-bottom:1rem">
-                <label for="{{ $field['id'] }}" style="display:block; font-size:0.75rem; font-weight:600; color:var(--text-secondary); margin-bottom:0.375rem">
-                    {{ $field['label'] }}
-                </label>
+        {{-- Nombre --}}
+        <div>
+            <label for="name" class="block text-xs font-semibold mb-1.5" style="color: var(--text-secondary)">
+                Nombre completo
+            </label>
+            <div class="relative">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style="color: var(--text-muted)">
+                    <x-heroicon-s-user class="w-4 h-4"/>
+                </span>
                 <input
-                    id="{{ $field['id'] }}"
-                    name="{{ $field['id'] }}"
-                    type="{{ $field['type'] }}"
-                    value="{{ $field['type'] !== 'password' ? old($field['id']) : '' }}"
-                    placeholder="{{ $field['placeholder'] }}"
-                    autocomplete="{{ $field['autocomplete'] }}"
-                    required
-                    style="
-                        width: 100%; padding: 0.625rem 0.875rem;
-                        border: 1px solid {{ $errors->has($field['id']) ? 'var(--color-error)' : 'var(--border-default)' }};
-                        border-radius: 10px; font-size: 0.875rem;
-                        background: var(--bg-surface); color: var(--text-primary);
-                        outline: none; box-sizing: border-box; transition: border-color 0.15s, box-shadow 0.15s;
-                    "
-                    onfocus="this.style.borderColor='var(--color-brand-500)';this.style.boxShadow='var(--focus-ring)'"
-                    onblur="this.style.borderColor='{{ $errors->has($field['id']) ? 'var(--color-error)' : 'var(--border-default)' }}';this.style.boxShadow='none'"
+                    id="name" name="name" type="text"
+                    value="{{ old('name') }}"
+                    required autofocus autocomplete="name"
+                    placeholder="Juan Pérez"
+                    class="w-full pl-9 pr-3.5 py-2.5 rounded-xl text-sm border transition-all outline-none
+                           focus:ring-[3px]
+                           {{ $errors->has('name') ? 'border-red-400 focus:border-red-500 focus:ring-red-100' : 'focus:border-indigo-500 focus:ring-indigo-100' }}"
+                    style="background: var(--bg-surface); color: var(--text-primary);
+                           border-color: {{ $errors->has('name') ? 'var(--color-error)' : 'var(--border-default)' }}"
                 >
-                @error($field['id'])
-                    <p style="font-size:0.75rem; color:var(--color-error); margin:0.25rem 0 0">{{ $message }}</p>
-                @enderror
             </div>
-        @endforeach
+            @error('name')
+                <p class="mt-1.5 text-xs" style="color: var(--color-error)">{{ $message }}</p>
+            @enderror
+        </div>
+
+        {{-- Email --}}
+        <div>
+            <label for="email" class="block text-xs font-semibold mb-1.5" style="color: var(--text-secondary)">
+                Correo electrónico
+            </label>
+            <div class="relative">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style="color: var(--text-muted)">
+                    <x-heroicon-s-envelope class="w-4 h-4"/>
+                </span>
+                <input
+                    id="email" name="email" type="email"
+                    value="{{ old('email') }}"
+                    required autocomplete="email"
+                    placeholder="tu@correo.com"
+                    class="w-full pl-9 pr-3.5 py-2.5 rounded-xl text-sm border transition-all outline-none
+                           focus:ring-[3px]
+                           {{ $errors->has('email') ? 'border-red-400 focus:border-red-500 focus:ring-red-100' : 'focus:border-indigo-500 focus:ring-indigo-100' }}"
+                    style="background: var(--bg-surface); color: var(--text-primary);
+                           border-color: {{ $errors->has('email') ? 'var(--color-error)' : 'var(--border-default)' }}"
+                >
+            </div>
+            @error('email')
+                <p class="mt-1.5 text-xs" style="color: var(--color-error)">{{ $message }}</p>
+            @enderror
+        </div>
+
+        {{-- Password --}}
+        <div>
+            <label for="password" class="block text-xs font-semibold mb-1.5" style="color: var(--text-secondary)">
+                Contraseña
+                <span class="font-normal ml-1" style="color: var(--text-muted)">(mínimo 8 caracteres)</span>
+            </label>
+            <div class="relative">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style="color: var(--text-muted)">
+                    <x-heroicon-s-lock-closed class="w-4 h-4"/>
+                </span>
+                <input
+                    id="password" name="password" type="password"
+                    required autocomplete="new-password"
+                    placeholder="••••••••"
+                    class="w-full pl-9 pr-3.5 py-2.5 rounded-xl text-sm border transition-all outline-none
+                           focus:ring-[3px]
+                           {{ $errors->has('password') ? 'border-red-400 focus:border-red-500 focus:ring-red-100' : 'focus:border-indigo-500 focus:ring-indigo-100' }}"
+                    style="background: var(--bg-surface); color: var(--text-primary);
+                           border-color: {{ $errors->has('password') ? 'var(--color-error)' : 'var(--border-default)' }}"
+                >
+            </div>
+            @error('password')
+                <p class="mt-1.5 text-xs" style="color: var(--color-error)">{{ $message }}</p>
+            @enderror
+        </div>
+
+        {{-- Confirm password --}}
+        <div>
+            <label for="password_confirmation" class="block text-xs font-semibold mb-1.5" style="color: var(--text-secondary)">
+                Confirmar contraseña
+            </label>
+            <div class="relative">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style="color: var(--text-muted)">
+                    <x-heroicon-s-lock-closed class="w-4 h-4"/>
+                </span>
+                <input
+                    id="password_confirmation" name="password_confirmation" type="password"
+                    required autocomplete="new-password"
+                    placeholder="••••••••"
+                    class="w-full pl-9 pr-3.5 py-2.5 rounded-xl text-sm border transition-all outline-none
+                           focus:ring-[3px] focus:border-indigo-500 focus:ring-indigo-100"
+                    style="background: var(--bg-surface); color: var(--text-primary); border-color: var(--border-default)"
+                >
+            </div>
+        </div>
 
         <button
             type="submit"
-            style="
-                width: 100%; padding: 0.6875rem 1rem; margin-top:0.5rem;
-                background: var(--color-brand-600); color: white;
-                border: none; border-radius: 10px;
-                font-size: 0.875rem; font-weight: 600;
-                cursor: pointer; transition: background 0.15s;
-                box-shadow: 0 2px 8px rgba(99,102,241,0.35)
-            "
-            onmouseover="this.style.background='var(--color-brand-700)'"
-            onmouseout="this.style.background='var(--color-brand-600)'"
+            class="w-full py-2.5 mt-1 rounded-xl text-sm font-semibold text-white
+                   bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 transition-colors"
+            style="box-shadow: 0 2px 12px rgba(99,102,241,.35)"
         >
             Crear cuenta
         </button>
     </form>
 </div>
 
-<p style="text-align:center; margin-top:1.25rem; font-size:0.8125rem; color:var(--text-muted)">
+<p class="text-center mt-5 text-[0.8125rem]" style="color: var(--text-muted)">
     ¿Ya tienes cuenta?
-    <a href="{{ route('login') }}" style="color:var(--color-brand-600); font-weight:600; text-decoration:none">
+    <a href="{{ route('login') }}" class="font-semibold text-indigo-600 hover:text-indigo-700 transition-colors">
         Inicia sesión
     </a>
 </p>
+
 @endsection
