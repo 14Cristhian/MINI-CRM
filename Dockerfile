@@ -25,7 +25,7 @@ RUN docker-php-ext-configure gd \
         opcache
 
 # Composer v2
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
