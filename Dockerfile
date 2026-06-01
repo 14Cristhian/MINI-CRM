@@ -50,7 +50,7 @@ CMD bash -c '\
     done && \
     php artisan migrate --force && \
     php artisan db:seed --force && \
-    php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan view:cache && \
+    php artisan config:cache || true && \
+    php artisan route:cache || true && \
+    php artisan view:cache || true && \
     php artisan serve --host=0.0.0.0 --port=${PORT:-8080}'
