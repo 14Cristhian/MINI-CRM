@@ -1,0 +1,29 @@
+* text=auto eol=lf
+
+*.blade.php text eol=lf diff=html
+*.php       text eol=lf diff=php
+*.js        text eol=lf
+*.ts        text eol=lf
+*.vue       text eol=lf
+*.css       text eol=lf diff=css
+*.html      text eol=lf diff=html
+*.json      text eol=lf
+*.md        text eol=lf diff=markdown
+*.toml      text eol=lf
+*.yml       text eol=lf
+*.yaml      text eol=lf
+*.xml       text eol=lf
+*.env       text eol=lf
+*.sh        text eol=lf
+
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.woff binary
+*.woff2 binary
+
+/.github     export-ignore
+CHANGELOG.md export-ignore
+.styleci.yml export-ignore
